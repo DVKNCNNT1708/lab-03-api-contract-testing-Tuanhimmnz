@@ -2,6 +2,9 @@ openapi: 3.1.0
 info:
   title: Smart Campus — AI Vision API
   version: 0.3.0
+  contact:
+    name: team-vision
+    email: team-vision@example.com
   description: |
     Contract mock tối thiểu cho consumer-side smoke test trong FIT4110 Lab 03.
     File này giúp Camera Stream hoặc Core Business gọi thử AI Vision khi service thật chưa hoàn thiện.
@@ -36,6 +39,20 @@ paths:
                     status: ok
                     service: ai-vision
                     version: 0.3.0
+        "429":
+          description: Health check rate limit exceeded
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+              examples:
+                rate_limited:
+                  value:
+                    type: https://smart-campus.local/problems/rate-limited
+                    title: Too Many Requests
+                    status: 429
+                    detail: Health check rate limit exceeded
+                    instance: /health
 
   /detect:
     post:
@@ -97,6 +114,20 @@ paths:
                     status: 401
                     detail: Missing or invalid bearer token
                     instance: /detect
+        "429":
+          description: Quá nhiều request nhận diện trong thời gian ngắn
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+              examples:
+                rate_limited:
+                  value:
+                    type: https://smart-campus.local/problems/rate-limited
+                    title: Too Many Requests
+                    status: 429
+                    detail: Vision detection rate limit exceeded
+                    instance: /detect
 
 components:
   securitySchemes:
@@ -109,10 +140,14 @@ components:
     DetectionRequest:
       type: object
       required: [camera_id]
+      anyOf:
+        - required: [image_url]
+        - required: [image_base64]
       properties:
         camera_id:
           type: string
           minLength: 3
+          pattern: "^[A-Z0-9-]{3,32}$"
           example: CAM01
         image_url:
           type: string
@@ -124,7 +159,7 @@ components:
 
     DetectionResponse:
       type: object
-      required: [detection_id, label, confidence, risk_level]
+      required: [detection_id, camera_id, label, confidence, risk_level]
       properties:
         detection_id:
           type: string

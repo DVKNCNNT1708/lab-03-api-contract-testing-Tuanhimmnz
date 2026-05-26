@@ -1,6 +1,18 @@
 ID,Folder,Endpoint,Method,Scenario,Input file/body,Expected status,Expected response check,Type,Pass/Fail,Evidence
-TC01,Functional,/health,GET,Service is alive,-,200,status=ok,functional,,
-TC02,Functional,/readings,POST,Create reading happy path,mock-data/sensor-reading-valid.json,201,"has reading_id, accepted=true",functional,,
-TC03,Negative,/readings,POST,Missing device_id,mock-data/sensor-reading-invalid-missing-device.json,400,Problem Details,negative,,
-TC04,Auth,/readings,POST,Missing token,mock-data/sensor-reading-valid.json,401,Problem Details,auth,,
-TC05,Boundary,/readings,POST,High temperature boundary,mock-data/sensor-reading-boundary.json,201/400,documented behavior,boundary,,
+TC01,00_Health,/health,GET,Service is alive,-,200,"status=ok; service and version exist",functional,Pass,reports/newman-report.xml
+TC02,01_Functional,/readings,POST,Create reading happy path,mock-data/sensor-reading-valid.json,201,"reading_id exists; accepted=true; metric=temperature",functional,Pass,reports/newman-report.xml
+TC03,01_Functional,/readings/latest,GET,List latest readings,"query device_id=ESP32-LAB-A01; limit=5",200,"items is an array; item has reading fields",functional,Pass,reports/newman-report.xml
+TC04,02_Auth,/readings/latest,GET,Valid token accepted,Authorization Bearer {{authToken}},200,"request succeeds with environment token",auth,Pass,reports/newman-report.xml
+TC05,02_Auth,/readings,POST,Missing token rejected,mock-data/sensor-reading-valid.json,401/403,"local response follows ProblemDetails; mock limitation documented",auth,Pass,reports/newman-report-local.xml
+TC06,02_Auth,/readings,POST,Invalid token rejected,mock-data/sensor-reading-valid.json,401/403,"local service rejects invalid bearer token",auth,Pass,reports/newman-report-local.xml
+TC07,03_Negative,/readings,POST,Missing required device_id,mock-data/sensor-reading-invalid-missing-device.json,400/422,"ProblemDetails title/status/detail",negative,Pass,reports/newman-report.xml
+TC08,03_Negative,/readings,POST,Wrong metric enum,"body metric=temp_hot",400/422,"ProblemDetails detail exists",negative,Pass,reports/newman-report.xml
+TC09,03_Negative,/readings,POST,Wrong value type,mock-data/sensor-reading-invalid-wrong-type.json,400/422,"ProblemDetails status within 400..599",negative,Pass,reports/newman-report.xml
+TC10,03_Negative,/readings/latest,GET,Invalid query parameter,query limit=abc,400/422,"ProblemDetails detail exists",negative,Pass,reports/newman-report.xml
+TC11,04_Boundary_Reliability,/readings,POST,Max temperature boundary accepted,mock-data/sensor-reading-boundary.json,201,"accepted=true and reading_id exists",boundary,Pass,reports/newman-report.xml
+TC12,04_Boundary_Reliability,/readings,POST,Temperature above max rejected,mock-data/sensor-reading-out-of-range.json,400/422,"ProblemDetails status/detail",boundary,Pass,reports/newman-report.xml
+TC13,04_Boundary_Reliability,/readings/latest,GET,Limit above maximum rejected,query limit=101,400/422,"ProblemDetails status within 400..599",boundary,Pass,reports/newman-report.xml
+TC14,04_Boundary_Reliability,/readings,POST,Rate limit contract,"X-Rate-Limit-Test=true; Prefer code=429",429,"ProblemDetails status=429",reliability,Pass,reports/newman-report.xml
+TC15,05_Consumer_side_Smoke,/detect,POST,Consumer calls AI Vision mock,"body camera_id=CAM01; image_url=https://example.com/frame.jpg",200,"detection_id; camera_id; label; confidence; risk_level",consumer-smoke,Pass,reports/newman-report.xml
+TC16,05_Consumer_side_Smoke,/detect,POST,Consumer parses AI Vision validation error,"body camera_id only; Prefer code=400",400/422,"provider ProblemDetails parsed",consumer-smoke,Pass,reports/newman-report.xml
+TC17,06_Local_only_NonFunctional,/readings,POST,Local response time threshold,"body humidity reading",201,"local response time < 1000ms",nonfunctional,Pass,reports/newman-report-local.xml

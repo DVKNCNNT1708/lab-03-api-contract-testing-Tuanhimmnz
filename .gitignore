@@ -3,4 +3,10 @@ node_modules/
 .env
 reports/*.xml
 reports/*.html
+!reports/newman-report.xml
+!reports/newman-report.html
+!reports/newman-report-local.xml
+!reports/newman-report-local.html
 prism.log
+prism-*.log
+local-iot*.log

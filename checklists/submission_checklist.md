@@ -1,28 +1,39 @@
-# Submission Checklist — Lab 03
+# Submission Checklist - Lab 03
 
-Trước khi nộp, repo nhóm cần có:
+Repo: `DVKNCNNT1708/lab-03-api-contract-testing-Tuanhimmnz`
 
-```text
-contracts/<team>.openapi.yaml
-postman/collections/<team>.postman_collection.json
-postman/environments/<team>_mock.postman_environment.json
-postman/environments/<team>_local.postman_environment.json
-reports/newman-report.xml hoặc reports/newman-report.html
-checklists/reliability_checklist.md
-templates/test-case-matrix.csv
-templates/consumer-provider-handshake.md
-```
+## Required files
 
-## Quy ước commit
+- [x] `contracts/iot-ingestion.openapi.yaml`
+- [x] `contracts/ai-vision.openapi.yaml`
+- [x] `postman/collections/FIT4110_lab03_iot_ingestion.postman_collection.json`
+- [x] `postman/environments/FIT4110_lab03_mock.postman_environment.json`
+- [x] `postman/environments/FIT4110_lab03_local.postman_environment.json`
+- [x] `reports/newman-report.xml`
+- [x] `reports/newman-report.html`
+- [x] `reports/newman-report-local.xml`
+- [x] `reports/newman-report-local.html`
+- [x] `reports/contract-lint-report.txt`
+- [x] `checklists/reliability_checklist.md`
+- [x] `templates/test-case-matrix.csv`
+- [x] `templates/consumer-provider-handshake.md`
+- [x] `.github/workflows/newman.yml`
 
-Gợi ý commit cuối:
+## Verification commands
 
 ```bash
-git add .
-git commit -m "lab03: add postman contract tests and newman report"
-git push
+npm ci
+npm run lint:contracts
+npm run lint:contracts:report
+npm run mock:iot
+npm run mock:vision
+npm run test:mock
+npm run local:iot
+npm run test:local
 ```
 
-## Link nộp LMS
+## Submission note
 
-Nộp link GitHub repo, không nộp file rời.
+- Mock report proves the OpenAPI contract can be exercised before the real provider is finished.
+- Local report proves real auth and validation behavior using the included local IoT service on port 8000.
+- GitHub Actions runs contract lint, starts both Prism mocks, waits with `wait-on`, runs Newman, and uploads reports as artifacts.

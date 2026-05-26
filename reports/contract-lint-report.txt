@@ -1,0 +1,5 @@
+FIT4110 Lab 03 - Contract lint report
+Command: C:\Program Files\nodejs\node.exe node_modules\@stoplight\spectral-cli\dist\index.js lint contracts/*.yaml --fail-severity warn
+Generated at: 2026-05-26T01:32:22.441Z
+Exit code: 0
+No results with a severity of 'warn' or higher found!

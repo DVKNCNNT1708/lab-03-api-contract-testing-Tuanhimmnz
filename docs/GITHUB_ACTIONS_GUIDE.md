@@ -28,4 +28,12 @@ Nếu test fail, sinh viên cần xem:
 
 ## Lưu ý
 
-Workflow mẫu chỉ chạy với mock environment.  
+Workflow chay voi mock environment trong CI, vi service local that thuong khong duoc deploy trong GitHub Actions.
+Local verification co the chay tren may dev bang:
+
+```bash
+npm run local:iot
+npm run mock:vision
+npx wait-on http-get://localhost:8000/health http-get://localhost:4011/health
+npm run test:local
+```

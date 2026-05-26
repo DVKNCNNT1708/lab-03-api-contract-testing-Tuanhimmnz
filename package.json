@@ -6,11 +6,13 @@
   "scripts": {
     "mock:iot": "prism mock contracts/iot-ingestion.openapi.yaml -p 4010 --host 0.0.0.0",
     "mock:vision": "prism mock contracts/ai-vision.openapi.yaml -p 4011 --host 0.0.0.0",
-    "mock:all": "sh -c 'npm run mock:iot & npm run mock:vision & wait'",
-    "lint:contracts": "spectral lint contracts/*.yaml --fail-severity error",
-    "test:mock": "newman run postman/collections/FIT4110_lab03_iot_ingestion.postman_collection.json -e postman/environments/FIT4110_lab03_mock.postman_environment.json --reporters cli,junit --reporter-junit-export reports/newman-report-mock.xml",
-    "test:local": "newman run postman/collections/FIT4110_lab03_iot_ingestion.postman_collection.json -e postman/environments/FIT4110_lab03_local.postman_environment.json --reporters cli,junit --reporter-junit-export reports/newman-report-local.xml",
-    "test:html": "newman run postman/collections/FIT4110_lab03_iot_ingestion.postman_collection.json -e postman/environments/FIT4110_lab03_mock.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/newman-report.html",
+    "mock:all": "node scripts/start-mocks.cjs",
+    "local:iot": "node src/local-iot-service.js",
+    "lint:contracts": "spectral lint contracts/*.yaml --fail-severity warn",
+    "lint:contracts:report": "node scripts/lint-contracts-report.cjs",
+    "test:mock": "newman run postman/collections/FIT4110_lab03_iot_ingestion.postman_collection.json -e postman/environments/FIT4110_lab03_mock.postman_environment.json --reporters cli,junit,htmlextra --reporter-junit-export reports/newman-report.xml --reporter-htmlextra-export reports/newman-report.html",
+    "test:local": "newman run postman/collections/FIT4110_lab03_iot_ingestion.postman_collection.json -e postman/environments/FIT4110_lab03_local.postman_environment.json --reporters cli,junit,htmlextra --reporter-junit-export reports/newman-report-local.xml --reporter-htmlextra-export reports/newman-report-local.html",
+    "test:html": "npm run test:mock",
     "test:ci": "npm run lint:contracts && npm run test:mock"
   },
   "devDependencies": {

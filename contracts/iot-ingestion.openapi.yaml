@@ -2,6 +2,9 @@ openapi: 3.1.0
 info:
   title: Smart Campus — IoT Ingestion API
   version: 0.3.0
+  contact:
+    name: team-iot
+    email: team-iot@example.com
   description: |
     Contract mẫu dùng cho FIT4110 Lab 03 — Postman, Mock Server và Contract Testing.
     Sinh viên có thể thay thế file này bằng openapi.yaml của service nhóm mình từ Lab 02.
@@ -38,6 +41,20 @@ paths:
                     status: ok
                     service: iot-ingestion
                     version: 0.3.0
+        "429":
+          description: Health check rate limit exceeded
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+              examples:
+                rate_limited:
+                  value:
+                    type: https://smart-campus.local/problems/rate-limited
+                    title: Too Many Requests
+                    status: 429
+                    detail: Health check rate limit exceeded
+                    instance: /health
 
   /readings:
     post:
@@ -147,6 +164,7 @@ paths:
           required: false
           schema:
             type: string
+            pattern: "^[A-Z0-9-]{3,32}$"
           example: ESP32-LAB-A01
         - in: query
           name: limit
@@ -228,6 +246,7 @@ components:
         device_id:
           type: string
           minLength: 3
+          pattern: "^[A-Z0-9-]{3,32}$"
           example: ESP32-LAB-A01
         metric:
           $ref: "#/components/schemas/SensorMetric"

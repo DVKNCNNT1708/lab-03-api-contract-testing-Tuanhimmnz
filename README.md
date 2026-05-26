@@ -1,6 +1,36 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/D2zKeiIj)
 # FIT4110_lab03_postman_mock_testing
 
+## Lab 03 completion summary
+
+Repo da duoc hoan thien cho `team-iot` voi:
+
+- OpenAPI contracts: `contracts/iot-ingestion.openapi.yaml` va `contracts/ai-vision.openapi.yaml`.
+- Postman collection du 6 folder bat buoc: Functional, Auth, Negative, Boundary/Reliability, Consumer-side Smoke, Local-only NonFunctional.
+- Mock environment: `postman/environments/FIT4110_lab03_mock.postman_environment.json`.
+- Local environment: `postman/environments/FIT4110_lab03_local.postman_environment.json`.
+- Local IoT service de chung minh auth/validation that: `npm run local:iot`.
+- Evidence reports: `reports/contract-lint-report.txt`, `reports/newman-report.xml`, `reports/newman-report.html`, `reports/newman-report-local.xml`, `reports/newman-report-local.html`.
+- CI workflow: `.github/workflows/newman.yml`.
+
+Chay nhanh voi mock:
+
+```bash
+npm ci
+npm run lint:contracts:report
+npm run mock:iot
+npm run mock:vision
+npx wait-on http-get://localhost:4010/health http-get://localhost:4011/health
+npm run test:mock
+```
+
+Chay local service trong terminal rieng:
+
+```bash
+npm run local:iot
+npm run test:local
+```
+
 **Học phần:** FIT4110 – Dịch vụ kết nối và Công nghệ nền tảng  
 **Buổi 3:** Kiểm thử tích hợp với Postman + Mock Server  
 **Case study:** Smart Campus Operations Platform  

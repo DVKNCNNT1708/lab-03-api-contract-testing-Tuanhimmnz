@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="FIT4110 Lab03 - IoT Ingestion Contract Tests" tests="17" time="0.159">
+  <testsuite name="00_Health / GET /health - service is alive" id="e60f9e96-0a6b-462f-b47f-10ecd0ae41c1" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.022">
+    <testcase name="Status code is 200" time="0.022" classname="00HealthGetHealthServiceIsAlive"/>
+    <testcase name="Health response has required schema" time="0.022" classname="00HealthGetHealthServiceIsAlive"/>
+  </testsuite>
+  <testsuite name="01_Functional / POST /readings - happy path creates reading" id="72678932-645c-4dc5-96e7-9e321da7d036" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.008">
+    <testcase name="Status code is 201" time="0.008" classname="01FunctionalPostReadingsHappyPathCreatesReading"/>
+    <testcase name="Response has created reading schema" time="0.008" classname="01FunctionalPostReadingsHappyPathCreatesReading"/>
+  </testsuite>
+  <testsuite name="01_Functional / GET /readings/latest - list latest readings" id="ee71ab0c-9dbb-4ef7-989f-e78ab4bcf808" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.007">
+    <testcase name="Status code is 200" time="0.007" classname="01FunctionalGetReadingsLatestListLatestReadings"/>
+    <testcase name="Response contains items array" time="0.007" classname="01FunctionalGetReadingsLatestListLatestReadings"/>
+  </testsuite>
+  <testsuite name="02_Auth / GET /readings/latest - valid token is accepted" id="b09ed15a-ac29-4fd5-ae0a-1855cc27d54b" timestamp="2026-05-26T01:35:01.634Z" tests="1" failures="0" errors="0" time="0.008">
+    <testcase name="Valid token request returns success" time="0.008" classname="02AuthGetReadingsLatestValidTokenIsAccepted"/>
+  </testsuite>
+  <testsuite name="02_Auth / POST /readings - missing token is rejected by local service" id="2345e609-9212-4c8d-8223-897626f5df2a" timestamp="2026-05-26T01:35:01.634Z" tests="1" failures="0" errors="0" time="0.009">
+    <testcase name="Mock limitation recorded: Prism does not enforce real bearer auth" time="0.009" classname="02AuthPostReadingsMissingTokenIsRejectedByLocalService"/>
+  </testsuite>
+  <testsuite name="02_Auth / POST /readings - invalid token is rejected by local service" id="2c08e5b3-7442-47da-a895-177e164041e0" timestamp="2026-05-26T01:35:01.634Z" tests="1" failures="0" errors="0" time="0.007">
+    <testcase name="Mock limitation recorded: invalid token needs real auth middleware" time="0.007" classname="02AuthPostReadingsInvalidTokenIsRejectedByLocalService"/>
+  </testsuite>
+  <testsuite name="03_Negative / POST /readings - missing required field returns validation error" id="8fe52750-0340-4fef-a155-094544613be0" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.009">
+    <testcase name="Invalid payload returns client error" time="0.009" classname="03NegativePostReadingsMissingRequiredFieldReturnsValidationError"/>
+    <testcase name="Error response follows ProblemDetails shape" time="0.009" classname="03NegativePostReadingsMissingRequiredFieldReturnsValidationError"/>
+  </testsuite>
+  <testsuite name="03_Negative / POST /readings - wrong enum value returns validation error" id="a1ec9f47-8911-41e5-947b-dbcfbd2e5bd2" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.009">
+    <testcase name="Wrong metric enum returns client error" time="0.009" classname="03NegativePostReadingsWrongEnumValueReturnsValidationError"/>
+    <testcase name="Error response has detail" time="0.009" classname="03NegativePostReadingsWrongEnumValueReturnsValidationError"/>
+  </testsuite>
+  <testsuite name="03_Negative / POST /readings - wrong value type returns validation error" id="55da384a-6693-4ef6-8376-0c3c8aef5bec" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.009">
+    <testcase name="Wrong value type returns client error" time="0.009" classname="03NegativePostReadingsWrongValueTypeReturnsValidationError"/>
+    <testcase name="ProblemDetails status is a client/server error code" time="0.009" classname="03NegativePostReadingsWrongValueTypeReturnsValidationError"/>
+  </testsuite>
+  <testsuite name="03_Negative / GET /readings/latest - invalid limit type returns validation error" id="976f0f40-42da-462e-9c67-d4a0fccad3f8" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.010">
+    <testcase name="Invalid query parameter returns client error" time="0.010" classname="03NegativeGetReadingsLatestInvalidLimitTypeReturnsValidationError"/>
+    <testcase name="Invalid query error includes detail" time="0.010" classname="03NegativeGetReadingsLatestInvalidLimitTypeReturnsValidationError"/>
+  </testsuite>
+  <testsuite name="04_Boundary_Reliability / POST /readings - boundary value 80 is accepted" id="77ca55ce-2d73-484c-baaa-181f72772f44" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.007">
+    <testcase name="Boundary value at max returns success" time="0.007" classname="04BoundaryReliabilityPostReadingsBoundaryValue80IsAccepted"/>
+    <testcase name="Boundary response confirms accepted reading" time="0.007" classname="04BoundaryReliabilityPostReadingsBoundaryValue80IsAccepted"/>
+  </testsuite>
+  <testsuite name="04_Boundary_Reliability / POST /readings - value 81 is rejected as out of range" id="f5713531-3ef1-4f8f-977c-9522f017cd77" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.009">
+    <testcase name="Out-of-range value returns client error" time="0.009" classname="04BoundaryReliabilityPostReadingsValue81IsRejectedAsOutOfRange"/>
+    <testcase name="Boundary test checks response error body" time="0.009" classname="04BoundaryReliabilityPostReadingsValue81IsRejectedAsOutOfRange"/>
+  </testsuite>
+  <testsuite name="04_Boundary_Reliability / GET /readings/latest - limit above max is rejected" id="907ee7cb-e431-4658-882f-c7091a29fb96" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.010">
+    <testcase name="Limit above max returns client error" time="0.010" classname="04BoundaryReliabilityGetReadingsLatestLimitAboveMaxIsRejected"/>
+    <testcase name="Limit error follows ProblemDetails" time="0.010" classname="04BoundaryReliabilityGetReadingsLatestLimitAboveMaxIsRejected"/>
+  </testsuite>
+  <testsuite name="04_Boundary_Reliability / POST /readings - rate limit returns 429" id="665fa124-3398-41c8-8a3d-6a7fbefb68a4" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.007">
+    <testcase name="Rate-limited request returns 429" time="0.007" classname="04BoundaryReliabilityPostReadingsRateLimitReturns429"/>
+    <testcase name="Rate limit response is ProblemDetails-compatible" time="0.007" classname="04BoundaryReliabilityPostReadingsRateLimitReturns429"/>
+  </testsuite>
+  <testsuite name="05_Consumer_side_Smoke / Consumer smoke - IoT can call AI Vision mock" id="86e23d5d-f75e-463f-812d-bdf8948deacd" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.008">
+    <testcase name="Consumer receives success from provider mock" time="0.008" classname="05ConsumerSideSmokeConsumerSmokeIoTCanCallAiVisionMock"/>
+    <testcase name="Consumer can read detection fields" time="0.008" classname="05ConsumerSideSmokeConsumerSmokeIoTCanCallAiVisionMock"/>
+  </testsuite>
+  <testsuite name="05_Consumer_side_Smoke / Consumer smoke - AI Vision invalid image contract" id="c189d347-257f-4e10-8a2e-8e3022ca9895" timestamp="2026-05-26T01:35:01.634Z" tests="2" failures="0" errors="0" time="0.012">
+    <testcase name="Provider mock returns client error for invalid image request" time="0.012" classname="05ConsumerSideSmokeConsumerSmokeAiVisionInvalidImageContract"/>
+    <testcase name="Consumer can parse provider ProblemDetails" time="0.012" classname="05ConsumerSideSmokeConsumerSmokeAiVisionInvalidImageContract"/>
+  </testsuite>
+  <testsuite name="06_Local_only_NonFunctional / POST /readings - local response time threshold" id="0e4f1f13-c413-49e8-a5cc-a15cf09602dc" timestamp="2026-05-26T01:35:01.634Z" tests="1" failures="0" errors="0" time="0.008">
+    <testcase name="Skipped on mock: mock latency is not real service evidence" time="0.008" classname="06LocalOnlyNonFunctionalPostReadingsLocalResponseTimeThreshold"/>
+  </testsuite>
+</testsuites>
